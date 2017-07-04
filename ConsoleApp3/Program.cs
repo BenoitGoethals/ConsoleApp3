@@ -13,7 +13,7 @@ namespace ConsoleApp3
                 straat = "sdfds",
                 email = "dfds@sdf.be"
             };
-            Repositrory<Post>.GetInstance().DataBase = "db";
+          //  Repositrory<Post>.GetInstance().DataBase = "db";
             Repositrory<Post>.GetInstance().Add(p);
             ;
             foreach (var item in Repositrory<Post>.GetInstance().All())
@@ -25,14 +25,14 @@ namespace ConsoleApp3
 
             Repositrory<Student>.GetInstance().Add(CreateNewStudents());
             
-            foreach (var item in Repositrory<Student>.GetInstance().All())
-            {
-                Console.WriteLine(item);
-            }
-            Console.ReadLine();
+          //  foreach (var item in Repositrory<Student>.GetInstance().All())
+           // {
+             //   Console.WriteLine(item);
+           // }
+         
 
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 Repositrory<Student>.GetInstance().Add(new Student
                 {
@@ -44,6 +44,11 @@ namespace ConsoleApp3
                 });
             }
             Console.WriteLine(Repositrory<Student>.GetInstance().Count());
+            Repositrory<Student>.GetInstance().RemoveAll();
+            Console.WriteLine(Repositrory<Student>.GetInstance().Count());
+            Repositrory<Post>.GetInstance().RemoveAll();
+
+            Console.ReadLine();
         }
   
 

@@ -1,51 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using MongoDB.Driver;
 
 namespace ConsoleApp3
 {
-    class Repositrory<T> where T : class, new()
+    sealed class Repositrory<T> where T : class, new()
     {
-        private static Repositrory<T> instance = new Repositrory<T>();
-        private static MongoClient client = new MongoClient();
-        public String DataBase { get; set; }
+        private static readonly Repositrory<T> Instance = new Repositrory<T>();
+        private static readonly MongoClient Client = new MongoClient(Resource1.mongodb.ToString());
+        private static readonly IMongoDatabase DbDatabase=Client.GetDatabase("db" + new T().GetType().Name);
+        private static readonly IMongoCollection<T> PostsCol = DbDatabase.GetCollection<T>("db" + new T().GetType().Name);
+       
 
 
         public  List<T> All()
         {
-
-            T t=new T();
-            var db = client.GetDatabase("db" + DataBase);
-            var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
-            return postsCol.AsQueryable<T>().ToList<T>();
+            
+          
+            return IAsyncCursorSourceExtensions.ToList<T>(PostsCol.AsQueryable<T>());
         }
 
 
         public  void Add(T t)
         {
-            var db = client.GetDatabase("db"+DataBase);
-            var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
-            postsCol.InsertOne(t);
+     
+            PostsCol.InsertOne(t);
         }
 
         public void Add(IList<T> list)
         {
-            T t = new T();
-            var db = client.GetDatabase("db" + DataBase);
-            var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
-            postsCol.InsertMany(list);
+         
+            PostsCol.InsertMany(list);
         }
 
 
 
         public long Count()
         {
-            T t = new T();
-            var db = client.GetDatabase("db" + DataBase);
-            var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
+          
+            return PostsCol.AsQueryable().Count<T>();
+        }
 
-            return postsCol.Count<T>();
+        public void RemoveAll()
+        {
+          
+         
+            DbDatabase.DropCollection("db" + new T().GetType().Name);
+
         }
 
 
@@ -56,7 +59,7 @@ namespace ConsoleApp3
 
         public static Repositrory<T> GetInstance()
         {
-            return instance;
+            return Instance;
         }
 
        
