@@ -29,10 +29,10 @@ namespace ConsoleApp3
             {
                 Console.WriteLine(item);
             }
-            Console.ReadLine();
+        
 
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 Repositrory<Student>.GetInstance().Add(new Student
                 {
@@ -44,6 +44,9 @@ namespace ConsoleApp3
                 });
             }
             Console.WriteLine(Repositrory<Student>.GetInstance().Count());
+            Repositrory<Student>.GetInstance().DeleteAll();
+            Console.WriteLine(Repositrory<Student>.GetInstance().Count());
+            Console.ReadLine();
         }
   
 

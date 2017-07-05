@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MongoDB.Driver;
+using System.Linq;
 
 namespace ConsoleApp3
 {
@@ -45,11 +46,17 @@ namespace ConsoleApp3
             var db = client.GetDatabase("db" + DataBase);
             var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
 
-            return postsCol.Count<T>();
+            return postsCol.Count<T>(p => true);
         }
 
 
-
+        public void DeleteAll()
+        {
+            T t = new T();
+            var db = client.GetDatabase("db" + DataBase);
+            var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
+            postsCol.DeleteMany(Post=>true);
+        }
 
 
 
