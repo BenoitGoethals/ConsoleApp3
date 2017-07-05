@@ -3,10 +3,25 @@ using System.Collections.Generic;
 
 namespace ConsoleApp3
 {
+    public delegate void MyDel();
+
     class Program
     {
+        event MyDel MyEvent;
+
+        private Program()
+        {
+            this.MyEvent += new MyDel(this.WelcomeUser);
+        }
+
+        private void WelcomeUser()
+        {
+            Console.WriteLine(Repositrory<Student>.GetInstance().Count().Result);
+        }
+
         static void Main(string[] args)
         {
+            
             var p = new Post
             {
                 name = "test",
@@ -16,7 +31,7 @@ namespace ConsoleApp3
             Repositrory<Post>.GetInstance().DataBase = "db";
             Repositrory<Post>.GetInstance().Add(p);
             ;
-            foreach (var item in Repositrory<Post>.GetInstance().All())
+            foreach (var item in Repositrory<Post>.GetInstance().All().Result)
             {
                 Console.WriteLine(item);
             }
@@ -25,14 +40,14 @@ namespace ConsoleApp3
 
             Repositrory<Student>.GetInstance().Add(CreateNewStudents());
             
-            foreach (var item in Repositrory<Student>.GetInstance().All())
+            foreach (var item in Repositrory<Student>.GetInstance().All().Result)
             {
                 Console.WriteLine(item);
             }
         
 
 
-            for (int i = 0; i < 100000; i++)
+            for (int i = 0; i < 1000; i++)
             {
                 Repositrory<Student>.GetInstance().Add(new Student
                 {
@@ -43,9 +58,10 @@ namespace ConsoleApp3
                     Age = 23+i
                 });
             }
-            Console.WriteLine(Repositrory<Student>.GetInstance().Count());
-            Repositrory<Student>.GetInstance().DeleteAll();
-            Console.WriteLine(Repositrory<Student>.GetInstance().Count());
+            Console.WriteLine(Repositrory<Student>.GetInstance().Count().Result);
+          var repo=  Repositrory<Student>.GetInstance().DeleteAllAsync();
+            
+           
             Console.ReadLine();
         }
   

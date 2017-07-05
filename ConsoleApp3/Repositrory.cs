@@ -3,59 +3,60 @@ using System.Collections.Generic;
 using System.Text;
 using MongoDB.Driver;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ConsoleApp3
 {
-    class Repositrory<T> where T : class, new()
+    public  class Repositrory<T> where T : class, new()
     {
         private static Repositrory<T> instance = new Repositrory<T>();
         private static MongoClient client = new MongoClient();
         public String DataBase { get; set; }
 
 
-        public  List<T> All()
+        public async Task<List<T>> All()
         {
 
             T t=new T();
             var db = client.GetDatabase("db" + DataBase);
             var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
-            return postsCol.AsQueryable<T>().ToList<T>();
+            return await postsCol.AsQueryable<T>().ToListAsync<T>();
         }
 
 
-        public  void Add(T t)
+        public async void Add(T t)
         {
             var db = client.GetDatabase("db"+DataBase);
             var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
-            postsCol.InsertOne(t);
+            await postsCol.InsertOneAsync(t);
         }
 
-        public void Add(IList<T> list)
+        public async void Add(IList<T> list)
         {
             T t = new T();
             var db = client.GetDatabase("db" + DataBase);
             var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
-            postsCol.InsertMany(list);
+            await postsCol.InsertManyAsync(list);
         }
 
 
 
-        public long Count()
+        public async Task<long> Count()
         {
             T t = new T();
             var db = client.GetDatabase("db" + DataBase);
             var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
 
-            return postsCol.Count<T>(p => true);
+            return await postsCol.CountAsync<T>(p => true);
         }
 
 
-        public void DeleteAll()
+        public  Task<DeleteResult> DeleteAllAsync()
         {
             T t = new T();
             var db = client.GetDatabase("db" + DataBase);
             var postsCol = db.GetCollection<T>("db" + t.GetType().Name);
-            postsCol.DeleteMany(Post=>true);
+            return  postsCol.DeleteManyAsync(p => true);
         }
 
 
