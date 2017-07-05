@@ -121,6 +121,6 @@
     <value />
   </data>
   <data name="mongodb" xml:space="preserve">
-    <value>mongodb://192.168.8.5</value>
+    <value>mongodb://192.168.8.5?maxPoolSize=5550</value>
   </data>
 </root>

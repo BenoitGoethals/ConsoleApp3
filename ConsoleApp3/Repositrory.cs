@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using MongoDB.Driver;
 
 namespace ConsoleApp3
@@ -16,24 +17,22 @@ namespace ConsoleApp3
        
 
 
-        public  List<T> All()
+        public async Task<List<T>> All()
         {
-            
-         
-           return IAsyncCursorSourceExtensions.ToList<T>(PostsCol.AsQueryable<T>());
+          return await PostsCol.AsQueryable<T>().ToListAsync<T>();
         }
 
 
-        public  void Add(T t)
+        public async void Add(T t)
         {
      
-            PostsCol.InsertOne(t);
+            await PostsCol.InsertOneAsync(t);
         }
 
-        public void Add(IList<T> list)
+        public async void Add(IList<T> list)
         {
          
-            PostsCol.InsertMany(list);
+           await PostsCol.InsertManyAsync(list);
         }
 
         public List<T> Get()
@@ -42,10 +41,10 @@ namespace ConsoleApp3
         }
 
 
-        public long Count()
+        public async Task<long> Count()
         {
         
-           return PostsCol.AsQueryable().Count<T>();
+           return await PostsCol.CountAsync<T>(p => true);
         }
 
         public void RemoveAll()
@@ -56,10 +55,6 @@ namespace ConsoleApp3
 
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
 
 
         public static Repositrory<T> GetInstance()

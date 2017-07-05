@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsoleApp3
 {
@@ -16,9 +17,9 @@ namespace ConsoleApp3
           //  Repositrory<Post>.GetInstance().DataBase = "db";
             Repositrory<Post>.GetInstance().Add(p);
             ;
-            foreach (var item in Repositrory<Post>.GetInstance().All())
+            foreach (var item in Repositrory<Post>.GetInstance().All().Result)
             {
-                Console.WriteLine(item);
+                Console.WriteLine(item.name);
             }
 
             Console.WriteLine("-----------------------------");
@@ -31,24 +32,39 @@ namespace ConsoleApp3
            // }
          
 
-
-            for (int i = 0; i < 100000; i++)
+            
+            var tasks=new Task[10];
+            for (var i2 = 0; i2 < 10; i2++)
             {
-                Repositrory<Student>.GetInstance().Add(new Student
+                var i1 = i2;
+                var i3 = i2;
+               tasks[i2]= Task.Factory.StartNew(() =>
                 {
-                    FirstName = "Gregor "+i,
-                    LastName = "Felix "+i,
-                    Subjects = new List<string>() { "English", "Mathematics", "Physics", "Biology" },
-                    Class = "JSS 3"+i,
-                    Age = 23+i
+                    for (var i = 0; i < 1000; i++)
+                    {
+
+                        Repositrory<Student>.GetInstance().Add(new Student
+                        {
+                            FirstName = "Gregor " + i1+i3,
+                            LastName = "Felix " + i1,
+                            Subjects = new List<string>() {"English", "Mathematics", "Physics", "Biology"},
+                            Class = "JSS 3" + i1,
+                            Age = 23 + i1
+                        });
+
+                    }
+                    ;
+                    Console.WriteLine("einde task"+i3);
                 });
             }
-            Console.WriteLine(Repositrory<Student>.GetInstance().Count());
-            Repositrory<Student>.GetInstance().RemoveAll();
-            Console.WriteLine(Repositrory<Student>.GetInstance().Count());
-            Repositrory<Post>.GetInstance().RemoveAll();
-
+            Task.WaitAll(tasks);
+            Console.WriteLine("einde+"+Repositrory<Student>.GetInstance().Count().Result);
+          
+          //  Console.WriteLine(Repositrory<Student>.GetInstance().Count().Result);
+          //  Repositrory<Post>.GetInstance().RemoveAll();
+         
             Console.ReadLine();
+            Repositrory<Student>.GetInstance().RemoveAll();
         }
   
 
