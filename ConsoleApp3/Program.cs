@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace ConsoleApp3
 {
@@ -25,14 +27,17 @@ namespace ConsoleApp3
             Console.WriteLine("-----------------------------");
 
             Repositrory<Student>.GetInstance().Add(CreateNewStudents());
-            
-          //  foreach (var item in Repositrory<Student>.GetInstance().All())
-           // {
-             //   Console.WriteLine(item);
-           // }
-         
 
-            
+            //  foreach (var item in Repositrory<Student>.GetInstance().All())
+            // {
+            //   Console.WriteLine(item);
+            // }
+
+            String newFileName = "my-image";
+
+            Image imageCircle = 
+
+
             var tasks=new Task[10];
             for (var i2 = 0; i2 < 10; i2++)
             {

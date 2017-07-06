@@ -71,7 +71,7 @@ namespace ConsoleApp3 {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to mongodb://192.168.8.5?maxPoolSize=5550.
+        ///   Looks up a localized string similar to mongodb://127.0.0.1?maxPoolSize=5550.
         /// </summary>
         internal static string mongodb {
             get {

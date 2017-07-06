@@ -25,6 +25,7 @@ namespace ConsoleApp3
 
         public async void Add(T t)
         {
+           
      
             await PostsCol.InsertOneAsync(t);
         }
@@ -39,6 +40,11 @@ namespace ConsoleApp3
         {
             return null;
         }
+
+        public async void AddImage(T t)
+        {
+            await PostsCol.InsertOneAsync(t);
+                }
 
 
         public async Task<long> Count()
